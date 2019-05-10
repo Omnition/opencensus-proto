@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# NOTE: mkgogogen.sh should be used instead. This only exist
+# for people who can't use gogoproto and need to maintain a fork to
+# contiue to use golang/protobuf
+
 # Run this if opencensus-proto is checked in the GOPATH.
 # go get -d github.com/census-instrumentation/opencensus-proto
 # to check in the repo to the GOAPTH.
