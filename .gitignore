@@ -1,5 +1,3 @@
-src/opencensus_gogo
-
 # Gradle
 .gradle
 build

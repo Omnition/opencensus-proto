@@ -24,16 +24,20 @@ Mgoogle/protobuf/wrappers.proto=github.com/gogo/protobuf/types"
 ARGS="goproto_registration=true"
 
 
-rm -rf opencensus_gogo
-cp -r opencensus opencensus_gogo
-find opencensus_gogo/ -type f -exec sed -i 's/gen-go/gen-gogo/g' {} +
+find opencensus -type f -exec sed -i 's/gen-go/gen-go/g' {} +
 
-protoc --gofast_out=$TYPES,$ARGS,plugins=grpc:$OUTDIR opencensus_gogo/proto/stats/v1/stats.proto \
-    && protoc --gofast_out=$TYPES,$ARGS,plugins=grpc:$OUTDIR opencensus_gogo/proto/metrics/v1/metrics.proto \
-    && protoc --gofast_out=$TYPES,$ARGS,plugins=grpc:$OUTDIR opencensus_gogo/proto/resource/v1/resource.proto \
-    && protoc --gofast_out=$TYPES,$ARGS,plugins=grpc:$OUTDIR opencensus_gogo/proto/trace/v1/trace.proto \
-    && protoc --gofast_out=$TYPES,$ARGS,plugins=grpc:$OUTDIR opencensus_gogo/proto/trace/v1/trace_config.proto \
-    && protoc -I=. --gofast_out=$TYPES,$ARGS,plugins=grpc:$OUTDIR opencensus_gogo/proto/agent/common/v1/common.proto \
-    && protoc -I=. --gofast_out=$TYPES,$ARGS,plugins=grpc:$OUTDIR opencensus_gogo/proto/agent/metrics/v1/metrics_service.proto \
-    && protoc -I=. --gofast_out=$TYPES,$ARGS,plugins=grpc:$OUTDIR opencensus_gogo/proto/agent/trace/v1/trace_service.proto \
-    && protoc --grpc-gateway_out=logtostderr=true,grpc_api_configuration=./opencensus_gogo/proto/agent/trace/v1/trace_service_http.yaml:$OUTDIR opencensus_gogo/proto/agent/trace/v1/trace_service.proto
+generate () {
+    protoc --gofast_out=$TYPES,$ARGS,plugins=grpc:$OUTDIR opencensus/proto/stats/v1/stats.proto \
+        && protoc --gofast_out=$TYPES,$ARGS,plugins=grpc:$OUTDIR opencensus/proto/metrics/v1/metrics.proto \
+        && protoc --gofast_out=$TYPES,$ARGS,plugins=grpc:$OUTDIR opencensus/proto/resource/v1/resource.proto \
+        && protoc --gofast_out=$TYPES,$ARGS,plugins=grpc:$OUTDIR opencensus/proto/trace/v1/trace.proto \
+        && protoc --gofast_out=$TYPES,$ARGS,plugins=grpc:$OUTDIR opencensus/proto/trace/v1/trace_config.proto \
+        && protoc -I=. --gofast_out=$TYPES,$ARGS,plugins=grpc:$OUTDIR opencensus/proto/agent/common/v1/common.proto \
+        && protoc -I=. --gofast_out=$TYPES,$ARGS,plugins=grpc:$OUTDIR opencensus/proto/agent/metrics/v1/metrics_service.proto \
+        && protoc -I=. --gofast_out=$TYPES,$ARGS,plugins=grpc:$OUTDIR opencensus/proto/agent/trace/v1/trace_service.proto \
+        && protoc --grpc-gateway_out=logtostderr=true,grpc_api_configuration=./opencensus/proto/agent/trace/v1/trace_service_http.yaml:$OUTDIR opencensus/proto/agent/trace/v1/trace_service.proto \
+        && daskjdk
+}
+
+generate
+# find opencensus -type f -exec sed -i 's/gen-go/gen-go/g' {} +
